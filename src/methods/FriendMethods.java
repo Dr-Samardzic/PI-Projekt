@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 import javax.swing.DefaultListModel;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import gifty.AddNewFriendPanel;
@@ -12,6 +13,7 @@ import gifty.DBConnection;
 import gifty.FriendRequestsPanel;
 import gifty.FriendsListPanel;
 import gifty.FriendsPanel;
+import gifty.FriendsProfilePanel;
 import gifty.HomePage;
 import gifty.HomePanel;
 import gifty.Login;
@@ -233,6 +235,14 @@ public class FriendMethods {
 	
 	//Friend Requests Methods
 	
+	public static void setNotification(Integer listSize, JLabel notification) {
+		if (listSize > 0) {
+			notification.setText(listSize.toString());
+		}else {
+			notification.setVisible(false);
+		}
+	}
+	
 	public static void loadRequestList() {
 		try {
 			// Open connection
@@ -263,8 +273,8 @@ public class FriendMethods {
 			if (FriendRequestsPanel.requestListDLM.size() >= 0) {
 				FriendRequestsPanel.listSize = FriendRequestsPanel.requestListDLM.size();
 				try{
-					SetNotificationMethod.setNotification(FriendRequestsPanel.listSize, HomePanel.notification);
-					SetNotificationMethod.setNotification(FriendRequestsPanel.listSize, FriendsPanel.notification);
+					setNotification(FriendRequestsPanel.listSize, HomePanel.notification);
+					setNotification(FriendRequestsPanel.listSize, FriendsPanel.notification);
 				}
 				catch (Exception e){
 					
@@ -394,5 +404,69 @@ public class FriendMethods {
 		}
 		
 	}
-
+	
+	//Friends Profile Methods
+	
+	public static void loadFriendsWishlist() {
+		try {
+			// Open connection
+			Connection con = DBConnection.getDBConnection();
+			
+			//Query
+			Statement stmt=con.createStatement();
+			
+			String sql = "select itemName from giftyDB.wishlist where idUser = '"+FriendsListPanel.selectedFriendUserId+"'";
+			
+			ResultSet rs = stmt.executeQuery(sql);
+			
+			DefaultListModel<String> DLM = new DefaultListModel<String>();
+			while (rs.next()){
+				
+				DLM.addElement(rs.getString("itemName"));
+				
+			}
+			
+			FriendsProfilePanel.friendsWishlist.setModel(DLM);
+			
+			rs.close();
+			stmt.close();
+			con.close();
+			
+		}catch (Exception e2){
+			JOptionPane.showMessageDialog(null, e2);
+		}
+	}
+	
+	public static void getDataFromSelectedFriendsItem() {
+		try {
+			// Open connection
+			Connection con = DBConnection.getDBConnection();
+			
+			//Query
+			Statement stmt=con.createStatement();
+			
+			String sql = "select * from giftyDB.wishlist where itemName = '"+FriendsProfilePanel.selectedItem+"'";
+			
+			ResultSet rs = stmt.executeQuery(sql);
+			
+			if (rs.next()){
+					
+				FriendsProfilePanel.itemId = rs.getString("idWishlistItem");
+				FriendsProfilePanel.itemName = rs.getString("itemName");
+				FriendsProfilePanel.itemPrice = rs.getString("itemPrice");
+				FriendsProfilePanel.itemLink = rs.getString("itemLink");
+				FriendsProfilePanel.itemCurrency = rs.getString("itemCurrency");
+			}
+			
+			rs.close();
+			stmt.close();
+			con.close();
+			
+			
+		}catch (Exception e2){
+			JOptionPane.showMessageDialog(null, e2);
+		}
+		
+	}
+	
 }

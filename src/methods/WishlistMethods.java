@@ -48,14 +48,12 @@ public class WishlistMethods {
 		}
 	}
 	
-	public static boolean URLValidation() {
+	public static boolean URLValidation(String link) {
 		try {
-			new URL (AddNewItemPanel.itemLinkTxt.getText()).openStream().close();
+			new URL (link).openStream().close();
 			return true;
 		}catch (MalformedURLException e){
-			JOptionPane.showMessageDialog(null, "The link you entered is not valid");
 		}catch(IOException e){
-			JOptionPane.showMessageDialog(null, "The link you entered is unavailable");
 		}
 		return false;
 	}
@@ -93,8 +91,8 @@ public class WishlistMethods {
 					|| (AddNewItemPanel.itemPriceTxt.getText().equals(""))){
 				JOptionPane.showMessageDialog(null, "You must insert all the data");	
 			}else {
-				if (URLValidation()) {
-					if(intValidation(AddNewItemPanel.itemPriceTxt.getText())) {
+				if (URLValidation(AddNewItemPanel.itemLinkTxt.getText())) {
+					if(priceValidation(AddNewItemPanel.itemPriceTxt.getText())) {
 						//Query
 						Statement stmt=con.createStatement();
 					
@@ -112,7 +110,11 @@ public class WishlistMethods {
 						
 						loadWishlist();
 						Sidebar.menuClicked(HomePage.wishlistPanel);
+					}else {
+						JOptionPane.showMessageDialog(null, "Enter a valid price number");
 					}
+				}else {
+					JOptionPane.showMessageDialog(null, "The link you entered is not valid");
 				}
 			}
 			
@@ -152,12 +154,12 @@ public class WishlistMethods {
 		
 	}
 	
-	public static boolean intValidation(String s) {	
+	public static boolean priceValidation(String s) {	
 		try {
 			Integer.parseInt(s); 
 			return true;
 		} catch (NumberFormatException e) {
-			JOptionPane.showMessageDialog(null, "Enter a valid price number");
+			
 		}
 		return false;	
 	}
