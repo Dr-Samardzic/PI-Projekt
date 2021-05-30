@@ -17,6 +17,7 @@ import javax.swing.SwingConstants;
 
 import methods.FriendMethods;
 
+@SuppressWarnings("serial")
 public class FriendsListPanel extends JPanel {
 	
 	public static String selectedUser;

@@ -1,7 +1,6 @@
 package gifty;
 
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
@@ -16,7 +15,6 @@ import java.sql.Statement;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -24,6 +22,8 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.JScrollPane;
+
+@SuppressWarnings("serial")
 
 public class FriendsProfilePanel extends JPanel {
 	
@@ -51,8 +51,7 @@ public class FriendsProfilePanel extends JPanel {
 	public static void loadFriendsWishlist() {
 		try {
 			// Open connection
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/giftyDB", "root", "hazymane666");
+			Connection con = DBConnection.getDBConnection();
 			
 			//Query
 			Statement stmt=con.createStatement();

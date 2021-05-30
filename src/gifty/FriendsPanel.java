@@ -13,8 +13,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 
-import methods.SetNotificationMethod;
+import methods.FriendMethods;
 
+@SuppressWarnings("serial")
 public class FriendsPanel extends JPanel {
 	
 	public static JLabel notification;
@@ -201,7 +202,7 @@ public class FriendsPanel extends JPanel {
 		
 		friendRequestTextPanel.add(notification);
 		
-		SetNotificationMethod.setNotification(FriendRequestsPanel.listSize, notification);
+		FriendMethods.setNotification(FriendRequestsPanel.listSize, notification);
 		
 	}
 }

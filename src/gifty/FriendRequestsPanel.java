@@ -17,6 +17,7 @@ import methods.FriendMethods;
 
 import javax.swing.JScrollPane;
 
+@SuppressWarnings("serial")
 public class FriendRequestsPanel extends JPanel {
 		
 	public static JList<String> requestList;
