@@ -1,5 +1,8 @@
 package methods;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -12,7 +15,24 @@ import javax.swing.JOptionPane;
 import gifty.DBConnection;
 import gifty.Registration;
 
-public class SignInMethod {
+public class RegistrationMethods {
+	
+	public static String generateHash(String input) {
+		try {
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			byte[] messageDigest = md.digest(input.getBytes());
+			BigInteger number = new BigInteger(1,messageDigest);
+			String hashtext = number.toString(16);
+			while (hashtext.length() < 32) {
+				hashtext = "0" + hashtext;
+			}
+			return hashtext;
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
 	
 	static public Boolean signIn() {
 		try {
@@ -20,7 +40,6 @@ public class SignInMethod {
 			Connection con = DBConnection.getDBConnection();
 			
 			//Data input
-			
 			Registration.firstNameInput = Registration.firstName.getText();
 			Registration.lastNameInput = Registration.lastName.getText();
 			Registration.emailInput = Registration.email.getText();
@@ -104,11 +123,35 @@ public class SignInMethod {
 			
 			//Insert user into database
 			else {
-				InsertDataMethod.insertUserData();
+				insertUserData();
 			}
 			
 		}catch (Exception e2){
 			JOptionPane.showMessageDialog(null, e2);
+			return false;
+		}
+		return true;
+	}
+	
+	public static Boolean insertUserData(){	 
+		try {
+			Connection con = DBConnection.getDBConnection();
+			
+			Statement stmt=con.createStatement();
+			
+			String sql = "Insert into users (firstName, lastName, email, username, password, dateOfBirth) values "
+					+ "('"+ Registration.firstNameInput +"', '"+ Registration.lastNameInput +"', "
+					+ "'"+ Registration.emailInput +"', '"+ Registration.usernameInput +"',"
+					+ " '"+ RegistrationMethods.generateHash(Registration.passwordInput) +"', "
+					+ "'"+ Registration.sdf.format(Registration.chosenDate) +"')";
+			
+			stmt.execute(sql);
+			stmt.close();
+			
+			JOptionPane.showMessageDialog(null, "You have successfully made an account.");
+			
+			con.close();
+		}catch (Exception e){
 			return false;
 		}
 		return true;

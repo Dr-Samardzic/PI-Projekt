@@ -8,8 +8,6 @@ import javax.swing.JOptionPane;
 
 import gifty.DBConnection;
 
-import gifty.Registration;
-
 import gifty.Login;
 
 public class LoginMethod {
@@ -20,7 +18,7 @@ public class LoginMethod {
 			Statement stmt=con.createStatement();
 		
 			String sql = "Select * from users where (username='"+Login.username.getText()+"' or email='"+Login.userEmail+"') "
-					+ "and password='"+GenerateHashMethod.generateHash(Login.password.getText())+"' ";
+					+ "and password='"+RegistrationMethods.generateHash(Login.password.getText())+"' ";
 			ResultSet rs = stmt.executeQuery(sql);
 			
 			if (rs.next()){

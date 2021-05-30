@@ -1,6 +1,6 @@
 package methods;
 
-public class GetInitialsMethod {
+public class SidebarMethods {
 	
 	public static String getInitials(String name)
     {	
